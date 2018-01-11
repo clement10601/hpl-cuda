@@ -36,6 +36,17 @@ which will drop the final xhpl executable in the bin/CUDA directory.
 Correct runtime path and link load settings are the responsibility
 of the user.
 
+RUN:
+
+$ cd bin/CUDA
+
+"""
+1. Please modify HPL.dat for tuning
+2. And append a nodes file for MPI
+"""
+
+$ mpirun -np 4 -hostfile nodes ./xhpl |tee HPL.out
+
 NOTE:
 
 This version of the code only acclerates one section
