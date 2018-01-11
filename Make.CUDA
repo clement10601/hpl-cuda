@@ -68,6 +68,13 @@ LN_S         = ln -s
 MKDIR        = mkdir
 RM           = /bin/rm -f
 TOUCH        = touch
+
+LBITS := $(shell getconf LONG_BIT)
+ifeq ($(LBITS),64)
+  SYSLIBDIR=/usr/lib64
+else
+  SYSLIBDIR=/usr/lib
+endif
 #
 # ----------------------------------------------------------------------
 # - Platform identifier ------------------------------------------------
@@ -79,7 +86,7 @@ ARCH         = CUDA
 # - HPL Directory Structure / HPL library ------------------------------
 # ----------------------------------------------------------------------
 #
-TOPdir       = $(HOME)/code/hpl-cuda
+TOPdir       = $(HOME)/Project/hpl/hpl-cuda
 INCdir       = $(TOPdir)/include
 BINdir       = $(TOPdir)/bin/$(ARCH)
 LIBdir       = $(TOPdir)/lib/$(ARCH)
@@ -93,9 +100,9 @@ HPLlib       = $(LIBdir)/libhpl.a
 # header files,  MPlib  is defined  to be the name of  the library to be 
 # used. The variable MPdir is only used for defining MPinc and MPlib.
 #
-MPdir        = $(MPICH2_INSTALL_PATH)
-MPinc        = $(MPICH2_INCLUDES)
-MPlib        = $(MPICH2_LIBRARIES)
+MPdir        = /opt/mpich
+MPinc        = -I$(MPdir)/include
+MPlib        = -L/opt/mpich/lib -lmpich -lmpl
 #
 # ----------------------------------------------------------------------
 # - Linear Algebra library (BLAS or VSIPL) -----------------------------
@@ -104,10 +111,10 @@ MPlib        = $(MPICH2_LIBRARIES)
 # header files,  LAlib  is defined  to be the name of  the library to be 
 # used. The variable LAdir is only used for defining LAinc and LAlib.
 #
-LAdir        = $(BLAS_INSTALL_PATH)
-CUBLASdir    = $(CUBLAS_INSTALL_PATH)
-LAinc        = $(BLAS_INCLUDES) $(CUBLAS_INCLUDES)
-LAlib        = $(BLAS_LIBRARIES) $(CUBLAS_LIBRARIES)
+LAdir        = $(SYSLIBDIR)/
+CUBLASdir    = /opt/cuda/include
+LAinc        = -I/opt/openblas/include -I/opt/cuda/include
+LAlib        = -L/opt/openblas/lib -lopenblas -lpthread -L/opt/cuda/lib64 -lcublas -lcudart -lcuda
 #
 # ----------------------------------------------------------------------
 # - F77 / C interface --------------------------------------------------
